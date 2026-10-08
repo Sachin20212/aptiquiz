@@ -12017,7 +12017,7 @@ const state = {
   gameQuestions: [],
   usedQuestionIds: new Set(),
   players: ["Aarav","Priya","Rahul","Neha","Vikram","Ananya","Rohan","Ishita","Kabir","Meera","Arjun","Sachin"],
-  scores: {"87"},
+  scores: {},
   correct: {},
   responses: {}
 };
