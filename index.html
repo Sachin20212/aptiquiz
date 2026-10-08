@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AptiQuiz Prototype</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Apti<span>Quiz</span></div>
+    <div class="status"><span class="dot"></span> Live Prototype</div>
+  </header>
+
+  <main>
+    <!-- HOME / JOIN -->
+    <section id="home" class="screen active">
+      <div class="hero">
+        <div class="badge">MULTIPLAYER APTITUDE GAME</div>
+        <h1>Think fast.<br><span>Score faster.</span></h1>
+        <p>Race through unique worldwide general-knowledge questions with your classmates in real time.</p>
+
+        <div class="join-card">
+          <h2>Join a Room</h2>
+          <input id="playerName" placeholder="Your name" value="Sachin" />
+          <input id="roomCode" placeholder="Room code" value="APTI25" />
+          <button onclick="joinRoom()">Join Game →</button>
+          <button class="secondary" onclick="show('host')">Create Room</button>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <div><b>⚡ 20-second rounds</b><small>One unique question at a time</small></div>
+        <div><b>🌍 Worldwide quiz</b><small>1,000 unique questions across many topics</small></div>
+        <div><b>🏆 Accurate scoring</b><small>Everyone starts at 0</small></div>
+      </div>
+    </section>
+
+    <!-- HOST -->
+    <section id="host" class="screen">
+      <div class="page-head">
+        <div><span class="eyebrow">HOST DASHBOARD</span><h1>Create a Quiz Room</h1></div>
+        <button class="ghost" onclick="show('home')">← Back</button>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h2>Question Set</h2>
+          <label>Set name</label>
+          <input id="setName" value="Campus Aptitude Challenge" />
+          <label>Topic</label>
+          <select><option>Quantitative</option><option>Logical Reasoning</option><option>Verbal</option><option>Data Interpretation</option></select>
+          <label>Question</label>
+          <textarea id="newQuestion">If 20% of a number is 60, what is the number?</textarea>
+          <div class="options">
+            <input value="240" /><input value="300" /><input value="360" /><input value="400" />
+          </div>
+          <label>Correct answer</label>
+          <select><option>300</option><option>240</option><option>360</option><option>400</option></select>
+          <button onclick="createRoom()">Create Room & Generate Code</button>
+        </div>
+        <div class="panel preview">
+          <span class="eyebrow">QUESTION PREVIEW</span>
+          <div class="preview-q">If 20% of a number is 60, what is the number?</div>
+          <div class="preview-options"><span>A. 240</span><span>B. 300</span><span>C. 360</span><span>D. 400</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOBBY -->
+    <section id="lobby" class="screen">
+      <div class="page-head">
+        <div><span class="eyebrow">ROOM LOBBY</span><h1>Ready to race?</h1></div>
+        <div class="room-code">ROOM <b id="lobbyCode">APTI25</b></div>
+      </div>
+      <div class="panel lobby-panel">
+        <div class="lobby-top">
+          <div><strong id="playerCount">12</strong><span>players joined</span></div>
+          <div class="waiting">Waiting for host to start…</div>
+        </div>
+        <div id="players" class="players"></div>
+        <button onclick="startGame()">Start Game →</button>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="screen">
+      <div class="quiz-head">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <div><span class="eyebrow">QUESTION 1 OF 10</span><h2>Worldwide General Knowledge</h2></div>
+        <div class="timer" id="timer" aria-label="15 seconds remaining">15</div>
+      </div>
+      <div class="question-panel">
+        <div class="question-number">03</div>
+        <h1 id="questionText">What is the capital city of Japan?</h1>
+        <div class="answers">
+          <button onclick="answer(this, false)">A. Seoul</button>
+          <button onclick="answer(this, true)">B. Tokyo</button>
+          <button onclick="answer(this, false)">C. Beijing</button>
+          <button onclick="answer(this, false)">D. Bangkok</button>
+        </div>
+      </div>
+      <div class="quiz-footer">
+        <button class="prev-question-btn" id="prevQuestionButton" onclick="previousQuestion()">← Previous</button>
+        <span id="answeredSummary">✓ 0 answered correctly</span>
+        <span id="roundMsg">Answer before the 15-second timer ends</span>
+        <button class="skip-btn" id="skipButton" onclick="skipQuestion()">Skip →</button>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="leaderboard" class="screen">
+      <div class="page-head">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <div><span class="eyebrow">LIVE LEADERBOARD</span><h1>Standings</h1></div>
+        <span class="live-pill">● LIVE</span>
+      </div>
+      <div class="panel">
+        <div class="leader-row head"><span>#</span><span>PLAYER</span><span>ACCURACY</span><span>SCORE</span></div>
+        <div id="leaderRows"></div>
+        <button onclick="showResults()">View Results →</button>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="results" class="screen">
+      <button class="back-btn result-back" onclick="goBack()">← Back</button>
+      <div class="results-hero">
+        <span class="eyebrow">GAME COMPLETE</span>
+        <h1>Great race, Sachin! 🎉</h1>
+        <p>You completed <b>10 unique worldwide questions</b>. Scores are calculated from your actual answers.</p>
+      </div>
+      <div class="stats">
+        <div><strong>90%</strong><span>Accuracy</span></div>
+        <div><strong>4.8s</strong><span>Avg. speed</span></div>
+        <div><strong id="finalScore">1,240</strong><span>Total score</span></div>
+      </div>
+      <div class="panel">
+        <h2>College League</h2>
+        <div class="college"><span>🥇 IIT Delhi</span><b>12,480</b></div>
+        <div class="college"><span>🥈 Your College</span><b>11,920</b></div>
+        <div class="college"><span>🥉 BITS Pilani</span><b>11,540</b></div>
+        <button onclick="show('home')">Play Again</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
